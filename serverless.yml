@@ -1,0 +1,59 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: mapp24
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: NotesAPI-Frida
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  environment: 
+    JWT_SECRET: ${env:JWT_SECRET}
+
+build:
+  esbuild:
+    bundle: true
+    minify: true
+
+package:
+  individually: true
+
+functions:
+  signup:
+    handler: functions/signup/index.handler
+    events:
+      - httpApi:
+          path: '/auth/signup'
+          method: POST
+  login:
+    handler: functions/login/index.handler
+    events:
+      - httpApi:
+          path: '/auth/login'
+          method: POST        
+
+resources: 
+  Resources:
+    notesDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: notes-db
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        
+    usersDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: accounts
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: S
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
