@@ -9,6 +9,9 @@ provider:
   region: eu-north-1
   environment: 
     JWT_SECRET: ${env:JWT_SECRET}
+    #kan adderas -${self:provider.stage, 'dev'} för att skilja på tabeller i olika stages, som dev och prod
+    NOTES_TABLE: notes-db
+    USERS_TABLE: note-accounts
 
 build:
   esbuild:
@@ -30,26 +33,54 @@ functions:
     events:
       - httpApi:
           path: '/auth/login'
-          method: POST        
+          method: POST      
+  createNote:
+    handler: functions/createNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes'
+          method: POST       
+  getNotes:
+    handler: functions/getNotes/index.handler
+    events:
+      - httpApi:
+          path: '/notes'
+          method: GET       
+  deleteNote:
+    handler: functions/deleteNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}'
+          method: DELETE  
+  editNote:
+    handler: functions/editNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}'
+          method: PATCH         
 
 resources: 
   Resources:
     notesDb:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: notes-db
+        TableName: ${self:provider.environment.NOTES_TABLE}
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: noteId
             AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: userId
             KeyType: HASH
+          - AttributeName: noteId
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        
-    usersDb:
+
+    userDb:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: accounts
+        TableName: ${self:provider.environment.USERS_TABLE}
         AttributeDefinitions:
           - AttributeName: username
             AttributeType: S
