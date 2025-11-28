@@ -1,0 +1,251 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: My first collection
+meta:
+  id: wrk_6de3256eb8e9461fa3e170cc86e4840e
+  created: 1763986121185
+  modified: 1763986121185
+  description: ""
+collection:
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/notes
+    name: getNotes
+    meta:
+      id: req_7b6aa3f855bd495091a1ef53055ef762
+      created: 1763986121190
+      modified: 1764324299773
+      isPrivate: false
+      description: ""
+      sortKey: -1763986207583.25
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/notes
+    name: createNotes
+    meta:
+      id: req_6e857a7286c74db1b8f4b6f17a837cea
+      created: 1763986146368
+      modified: 1764324287864
+      isPrivate: false
+      description: ""
+      sortKey: -1763986213300.5
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "Test för bedömning",
+        	"text": "hallihallå hejsan"
+
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/notes/zk4TnThRSEdzmD20G8cQd
+    name: editNotes
+    meta:
+      id: req_09cbb1ee89af400da73bf8293b5a89e7
+      created: 1763986164697
+      modified: 1764324293166
+      isPrivate: false
+      description: ""
+      sortKey: -1763986164697
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"title": "Bedömning",
+        	"text": "Ändrar lite för bedömning av API"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/notes/6R-zSLGWkJqXPnoG7RAwy
+    name: deleteNotes
+    meta:
+      id: req_0e1b8ec3f32043f4a0507daa707b5b40
+      created: 1763986201866
+      modified: 1764324296252
+      isPrivate: false
+      description: ""
+      sortKey: -1763986201866
+    method: DELETE
+    headers:
+      - name: User-Agent
+        value: insomnia/12.0.0
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/auth/login
+    name: login
+    meta:
+      id: req_e7518937f8264e8d8ec0e416cb788eaa
+      created: 1763986224735
+      modified: 1764321765541
+      isPrivate: false
+      description: ""
+      sortKey: -1763986224735
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "Frida",
+        	"password": "hejsan123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/auth/signup
+    name: signup
+    meta:
+      id: req_8298ba6ba703494a980958c3710a5459
+      created: 1763986239488
+      modified: 1764321752380
+      isPrivate: false
+      description: ""
+      sortKey: -1763986239488
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"username": "Frida",
+        	"password": "hejsan123",
+        	"firstname": "Frida",
+        	"lastname": "Eriksson"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.0.0
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/deleted-notes
+    name: getDeletedNotes
+    meta:
+      id: req_528ee5763f4643ed80803b4a24f52fa3
+      created: 1764321687925
+      modified: 1764324306765
+      isPrivate: false
+      description: ""
+      sortKey: -1764321687925
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: https://le0691s4dg.execute-api.eu-north-1.amazonaws.com/notes/6R-zSLGWkJqXPnoG7RAwy/restore
+    name: restoreNote
+    meta:
+      id: req_a520ef0856354a96809b34d854d67715
+      created: 1764321939025
+      modified: 1764324309952
+      isPrivate: false
+      description: ""
+      sortKey: -1764321939025
+    method: POST
+    headers:
+      - name: User-Agent
+        value: insomnia/12.1.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: ""
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_06a846a441276146b81e5bccf9c385384f94b513
+    created: 1763986121187
+    modified: 1763986121187
+environments:
+  name: Base Environment
+  meta:
+    id: env_06a846a441276146b81e5bccf9c385384f94b513
+    created: 1763986121186
+    modified: 1763986121186
+    isPrivate: false

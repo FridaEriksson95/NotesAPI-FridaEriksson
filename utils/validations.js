@@ -114,6 +114,13 @@ const successResponse = (message = null, data = null) => {
 	return sendResponse(200, response);
 };
 
+const failureResponse = (message = null, data = null) => {
+	const response = { success: false };
+	if (message) response.message = message;
+	if (data) Object.assign(response, data);
+	return sendResponse(400, response);
+};
+
 module.exports = {
 	validateNoteBody,
 	missingNoteIdError,
@@ -124,4 +131,5 @@ module.exports = {
 	serverError,
 	signUpResponse,
 	loginResponse,
+	failureResponse,
 };

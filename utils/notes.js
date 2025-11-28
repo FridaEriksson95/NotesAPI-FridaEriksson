@@ -3,7 +3,6 @@ const { nanoid } = require('nanoid');
 const {
 	PutCommand,
 	UpdateCommand,
-	DeleteCommand,
 	QueryCommand,
 } = require('@aws-sdk/lib-dynamodb');
 
@@ -97,13 +96,22 @@ const editNote = async (userId, noteId, updates) => {
 };
 
 const deleteNote = async (userId, noteId) => {
+	const now = new Date();
+	const deletedAt = now.toISOString();
+	const expiresAt = Math.floor((now.getTime() + 5 * 24 * 60 * 60 * 1000) / 1000);
+	/* 10 sekunders test för att permanent ta bort anteckning:
+	const expiresAt = Math.floor(Date.now() / 1000) + 10; */
+
 	try {
 		await db.send(
-			new DeleteCommand({
+			new UpdateCommand({
 				TableName: process.env.NOTES_TABLE,
 				Key: { userId: userId, noteId: noteId },
-				ConditionExpression: 'userId = :userId',
-				ExpressionAttributeValues: { ':userId': userId },
+				UpdateExpression: 'set deletedAt = :deletedAt, expiresAt = :expiresAt',
+				ExpressionAttributeValues: { ':deletedAt': deletedAt, ':expiresAt': expiresAt},
+				ConditionExpression:
+					'userId = :userId AND attribute_not_exists(deletedAt)',
+				ExpressionAttributeValues: { ':deletedAt': deletedAt, ':expiresAt': expiresAt, ':userId': userId },
 			})
 		);
 	} catch (error) {
@@ -114,4 +122,49 @@ const deleteNote = async (userId, noteId) => {
 	}
 };
 
-module.exports = { createNote, getUserNotes, editNote, deleteNote };
+const getDeletedNotes = async (userId) => {
+	const now = Math.floor(Date.now() / 1000);
+
+	const result = await db.send(
+		new QueryCommand({
+			TableName: process.env.NOTES_TABLE,
+			KeyConditionExpression: 'userId = :userId',
+			FilterExpression: 'attribute_exists(deletedAt) AND (attribute_not_exists(expiresAt) OR expiresAt > :now)',
+			ExpressionAttributeValues: { ':userId': userId, ':now': now },
+		})
+	);
+	return result.Items || [];
+};
+
+const restoreNote = async (userId, noteId) => {
+	const now = new Date().toISOString();
+
+	try {
+		const result = await db.send(
+			new UpdateCommand({
+				TableName: process.env.NOTES_TABLE,
+				Key: { userId: userId, noteId: noteId },
+				UpdateExpression: ' REMOVE deletedAt SET modifiedAt = :now',
+				ExpressionAttributeValues: { ':now': now },
+				ConditionExpression: 'userId = :userId AND attribute_exists(deletedAt)',
+				ExpressionAttributeValues: { ':userId': userId, ':now': now },
+				ReturnValues: 'ALL_NEW',
+			})
+		);
+		return result.Attributes;
+	} catch (error) {
+		if (error.name === 'ConditionalCheckFailedException') {
+			throw new Error('Note not found or unauthorized to restore');
+		}
+		throw error;
+	}
+};
+
+module.exports = {
+	createNote,
+	getUserNotes,
+	editNote,
+	deleteNote,
+	getDeletedNotes,
+	restoreNote,
+};
