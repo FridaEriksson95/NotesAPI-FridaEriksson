@@ -10,7 +10,7 @@ Serverless projekt med aws databas konstruktion.
 Kör följande i terminal:
 
 ```
-
+git clone https://github.com/FridaEriksson95/NotesAPI-FridaEriksson.git
 cd NotesAPI-Frida
 ```
 
