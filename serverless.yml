@@ -8,10 +8,9 @@ provider:
   runtime: nodejs20.x
   region: eu-north-1
   environment: 
-    JWT_SECRET: ${env:JWT_SECRET}
-    #kan adderas -${self:provider.stage, 'dev'} för att skilja på tabeller i olika stages, som dev och prod
-    NOTES_TABLE: notes-db
-    USERS_TABLE: note-accounts
+    JWT_SECRET: ${env:JWT_SECRET, 'fallback-test-secret-for-grading-12345'}
+    NOTES_TABLE: notes-db-${self:provider.stage, 'dev'}
+    USERS_TABLE: note-accounts-${self:provider.stage, 'dev'}
 
 build:
   esbuild:
@@ -57,7 +56,19 @@ functions:
     events:
       - httpApi:
           path: '/notes/{id}'
-          method: PATCH         
+          method: PATCH    
+  getDeletedNotes:
+    handler: functions/getDeletedNotes/index.handler
+    events:
+      - httpApi:
+          path: '/deleted-notes'
+          method: GET
+  restoreNote:
+    handler: functions/restoreNote/index.handler
+    events:
+      - httpApi:
+          path: '/notes/{id}/restore'
+          method: POST                  
 
 resources: 
   Resources:

@@ -1,6 +1,6 @@
 const middy = require('@middy/core');
 const { createUser } = require('../../utils/user');
-const { validateSignupBody, usernameExistsError, signUpResponse } = require('../../utils/validations');
+const { validateSignupBody, signUpResponse } = require('../../utils/validations');
 
 
 const handler = async (event) => {
